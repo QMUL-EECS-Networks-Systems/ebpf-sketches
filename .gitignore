@@ -1,0 +1,4 @@
+.vscode/
+scripts-microbench/hashbench/bin-no-simd/
+scripts-microbench/hashbench/bin-simd/
+scripts-microbench/hashbench/results/
