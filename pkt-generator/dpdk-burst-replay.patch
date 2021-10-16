@@ -1,0 +1,18 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index e5d5be2..7bdce5f 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -8,8 +8,8 @@ dpdk_replay_SOURCES	=	main.c \
+ 						pcap.c \
+ 						utils.c
+ 
+-dpdk_replay_CFLAGS	:=	$(CFLAGS) -I/usr/include/dpdk -march=native -I$(includedir)
+-dpdk_replay_LDFLAGS	:=	$(LDFLAGS) -L$(libdir) -pthread -lnuma -lm -ldl \
+-						-Wl,--whole-archive -Wl,--start-group \
+-						-ldpdk \
+-						-Wl,--end-group -Wl,--no-whole-archive
++DPDK_CFLAGS = -O3 $(shell pkg-config --cflags libdpdk)
++DPDK_LDFLAGS_STATIC = $(shell pkg-config --static --libs libdpdk)
++
++dpdk_replay_CFLAGS	:=	$(CFLAGS) $(DPDK_CFLAGS)
++dpdk_replay_LDFLAGS	:=      $(LDFLAGS) $(DPDK_LDFLAGS_STATIC)

@@ -1,0 +1,61 @@
+# Command line arguments: (DPDK args are defaults)
+# sudo ./usr/local/bin/pktgen -c fffff -n 4 --proc-type auto --file-prefix pg -- -T -P -m "[1/3/5:7/9].0, [11/13/15:17/19].1" -f pktgen-dpdk-cfg 
+
+
+# Global configuration:
+#geometry 132x45
+disable mac_from_arp
+
+######################### Port  0 ##################################
+#
+# Port:  0, Burst: 32, Rate:100%, Flags:00000010, TX Count:Forever
+#           Sequence count:0, Prime:1 VLAN ID:0001, Link: <UP-40000-FD>
+#
+# Set up the primary port information:
+set 0 count 0
+set 0 size 64
+set 0 rate 100
+set 0 burst 32
+set 0 proto udp
+
+enable 0 range
+#
+# Range packet information:
+range 0 src mac start 3c:fd:fe:e6:a5:70
+range 0 src mac min 00:00:00:00:00:00
+range 0 src mac max 00:00:00:00:00:00
+range 0 src mac inc 00:00:00:00:00:00
+
+range 0 dst mac start 3c:fd:fe:e6:a5:71
+range 0 dst mac min 00:00:00:00:00:00
+range 0 dst mac max 00:00:00:00:00:00
+range 0 dst mac inc 00:00:00:00:00:00
+
+range 0 src ip start 192.168.0.1
+range 0 src ip min 192.168.0.1
+range 0 src ip max 192.168.0.254
+range 0 src ip inc 0.0.0.0
+
+range 0 dst ip start 192.168.1.1
+range 0 dst ip min 192.168.1.1
+range 0 dst ip max 192.168.1.254
+range 0 dst ip inc 0.0.0.1
+
+range 0 proto udp
+
+range 0 src port start 1234
+range 0 src port min 0
+range 0 src port max 65535
+range 0 src port inc 0
+
+range 0 dst port start 5678
+range 0 dst port min 5678
+range 0 dst port max 10100
+range 0 dst port inc 1
+
+range 0 size start 64
+range 0 size min 64
+range 0 size max 64
+range 0 size inc 0
+
+################################ Done #################################
