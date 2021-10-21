@@ -1,4 +1,4 @@
 .vscode/
-scripts-microbench/hashbench/bin-no-simd/
-scripts-microbench/hashbench/bin-simd/
-scripts-microbench/hashbench/results/
+tests/micro-benchmarks/hashbench/bin-no-simd/
+tests/micro-benchmarks/hashbench/bin-simd/
+tests/micro-benchmarks/hashbench/results/

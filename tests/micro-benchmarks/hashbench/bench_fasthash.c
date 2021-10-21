@@ -6,14 +6,7 @@
 #include "stdint.h"
 #include "time.h"
 
-#include "jhash.h"
 #include "fasthash.h"
-#include "lookup3.h"
-#include "csiphash.h"
-
-
-//#include "xxhash32_danny.h"
-#include "xxhash32.h"
 
 struct pkt_5tuple {
   __be32 src_ip;
