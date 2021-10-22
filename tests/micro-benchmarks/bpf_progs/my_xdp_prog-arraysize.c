@@ -30,7 +30,8 @@ static inline uint32_t array_experiment_exec(uint32_t hashvalue){
 #ifdef ACTION_WRITE
     uint32_t* value = experiment_array.lookup(&index);
     if(!value) return ERROR_RETURN;
-    *value = hashvalue;
+    __sync_lock_test_and_set(value, hashvalue);
+    // *value = hashvalue;
     return 0;
 #endif
 
@@ -42,7 +43,8 @@ static inline uint32_t array_experiment_exec(uint32_t hashvalue){
 #ifdef ACTION_INC
     uint32_t* value = experiment_array.lookup(&index);
     if(!value) return ERROR_RETURN;
-    experiment_array.increment(index, 1);
+    __sync_fetch_and_add(value, 1);
+    // experiment_array.increment(index, 1);
     return 0;
 #endif
     

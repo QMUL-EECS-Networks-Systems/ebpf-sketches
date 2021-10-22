@@ -88,7 +88,7 @@ def run_experiment_ht(use_percpu=False, table_size=128, num_insert=128, action='
     assert(action in ['ACTION_WRITE','ACTION_INC','ACTION_READ','ACTION_WRITE_UPDATE'])
     
     outputfn=f'outputarr/exp-{maptype}-ts{table_size}-ni{num_insert}-{action}.log'
-    cf=['-Ofast','-march=native', #-mcpu=probe
+    cf=['-Ofast','-march=native',
         f'-DEXPERIMENT_MAPTYPE=\"{maptype}\"',
         f'-DEXPERIMENT_TABLE_SIZE={table_size}',
         f'-DEXPERIMENT_NUM_ELEM={num_insert}',
@@ -110,12 +110,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    for use_percpu in [False]:
-        for table_size in [2**i for i in range(23,23+1)]:#8 to 8388608
+    for use_percpu in [False, True]:
+        for table_size in [2**i for i in range(3,23+1)]:#8 to 8388608
             # for num_insert in [table_size,table_size//2,table_size//4]:
             for num_insert in [table_size]:
-                # for action in ['ACTION_WRITE','ACTION_INC', 'ACTION_READ','ACTION_WRITE_UPDATE']:
-                for action in ['ACTION_WRITE']:
+                for action in ['ACTION_WRITE','ACTION_INC', 'ACTION_READ','ACTION_WRITE_UPDATE']:
+                # for action in ['ACTION_WRITE']:
                     run_experiment_ht(use_percpu=use_percpu,
                                       table_size=table_size,
                                       num_insert=num_insert,
