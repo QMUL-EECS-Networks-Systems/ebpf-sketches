@@ -11,18 +11,41 @@ In particular, we have:
 
 ## Requirements
 
-To run correctly the sketches you first need to install [BCC](https://github.com/iovisor/bcc).
+To run correctly the sketches you first need to install the latest version of LLVM and [BCC](https://github.com/iovisor/bcc).
+All the scripts and instructions in this repo had been tested on Ubuntu 20.04 with kernel version 5.13.
+
+### Automatic installation
+
+We provide a script to automatically install all the requirements needed by this project.
+You can simply run:
+
+```shell
+sudo ./install-requirements.sh
+```
+
+### Manual installation
+#### 1. LLVM 13
+
+```shell
+# Install LLVM 13
+wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.0/clang+llvm-13.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz
+mkdir clang+llvm13
+tar xf clang+llvm-13.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz -C clang+llvm13 --strip-components 1
+```
+
+#### 2. BCC
 
 ```shell
 # Clone BCC repo
 git clone https://github.com/iovisor/bcc.git
-
+git apply bcc-patch.patch
 mkdir bcc/build; cd bcc/build
-cmake -DPYTHON_CMD=python3 .. # build python3 binding
+cmake -DLLVM_DIR=~/clang+llvm13/lib/cmake/llvm -DPYTHON_CMD=python3 .. # build python3 binding
 make -jN
 sudo make install
 ```
 
+#### 3. Python3 requirements
 Then, you need to install the python3 requirements:
 
 ```shell
