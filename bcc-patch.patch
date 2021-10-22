@@ -1,0 +1,12 @@
+diff --git a/src/cc/bpf_module.cc b/src/cc/bpf_module.cc
+index 007d6ad3..cd676e78 100644
+--- a/src/cc/bpf_module.cc
++++ b/src/cc/bpf_module.cc
+@@ -476,6 +476,7 @@ int BPFModule::finalize() {
+   builder.setErrorStr(&err);
+   builder.setMCJITMemoryManager(ebpf::make_unique<MyMemoryManager>(sections_p));
+   builder.setMArch("bpf");
++  builder.setMCPU("probe");
+ #if LLVM_MAJOR_VERSION <= 11
+   builder.setUseOrcMCJITReplacement(false);
+ #endif
