@@ -125,6 +125,6 @@ get_llvm
 get_install_bcc
 
 echo -e "${COLOR_GREEN}[INFO] Install Python3 requirements ${COLOR_OFF}"
-pip3 install -r ${DIR}/requirements.txt
+pip3 install --ignore-installed -r ${DIR}/requirements.txt
 
 success_message
