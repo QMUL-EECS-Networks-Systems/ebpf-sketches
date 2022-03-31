@@ -1,5 +1,6 @@
 .vscode/
 tests/micro-benchmarks/hashbench/bin-no-simd/
 tests/micro-benchmarks/hashbench/bin-simd/
+tests/micro-benchmarks/hashbench/obj-dump/
 tests/micro-benchmarks/hashbench/results/
 deps/

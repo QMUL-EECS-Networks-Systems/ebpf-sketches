@@ -41,7 +41,7 @@ struct tcp_hdr {
   __be16 dest;
   __be32 seq;
   __be32 ack_seq;
-  __u8 res1 : 4, doff : 4;
+  __u8 doff : 4, res1 : 4;
   __u8 flags;
   __be16 window;
   __sum16 check;

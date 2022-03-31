@@ -1,0 +1,3 @@
+SortIncludes: 'false'
+IndentWidth: '2'
+AllowShortFunctionsOnASingleLine: Empty
