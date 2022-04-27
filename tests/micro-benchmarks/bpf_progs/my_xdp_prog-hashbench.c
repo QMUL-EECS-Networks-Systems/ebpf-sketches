@@ -27,6 +27,8 @@
 #include "csiphash.h"
 #elif _HASH_NUM == 5
 #include "xxhash32_danny.h"
+#elif _HASH_NUM == 6
+#include "murmurhash3.h"
 #endif
 
 BPF_PERCPU_ARRAY(dropcnt, long, 1);
@@ -156,6 +158,12 @@ int xdp_prog1(struct xdp_md *ctx) {
     for(int i = 0; i < N; i++) {
         pkt.src_ip=i;
         hashvalue ^= xxhash32(&pkt, sizeof(pkt), i*i);
+    }
+#elif _HASH_NUM == 6
+// #pragma clang loop unroll(full)
+    for(int i = 0; i < N; i++) {
+        pkt.src_ip=i;
+        hashvalue ^= MurmurHash3_x86_32(&pkt, sizeof(pkt), i*i);
     }
 #endif
 

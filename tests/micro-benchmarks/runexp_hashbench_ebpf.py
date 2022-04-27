@@ -1,10 +1,5 @@
 #!/usr/bin/python
 #
-# xdp_drop_count.py Drop incoming packets on XDP layer and count for which
-#                   protocol type
-#
-# Copyright (c) 2016 PLUMgrid
-# Copyright (c) 2016 Jan Ruth
 # Licensed under the Apache License, Version 2.0 (the "License")
 
 from bcc import BPF
@@ -112,6 +107,11 @@ if __name__ == '__main__':
     hash_start_value = random.randint(1, np.iinfo(np.uint32).max)
 
     i = 0
-    for hash_name in ['JHASH', 'HASHLITTLE', 'FASTHASH32', 'XXHASH32', 'CSIPHASH', 'XXHASH32_DANNY']:
+    # run_experiment_ht('JHASH', 0)
+    # run_experiment_ht('FASTHASH32', 2)
+    # run_experiment_ht('XXHASH32_DANNY', 5)
+    # run_experiment_ht('XXHASH32_SEB', 6)
+
+    for hash_name in ['JHASH', 'HASHLITTLE', 'FASTHASH32', 'XXHASH32', 'CSIPHASH', 'XXHASH32_DANNY', 'MURMURHASH3']:
         run_experiment_ht(hash_name, i)
         i+=1

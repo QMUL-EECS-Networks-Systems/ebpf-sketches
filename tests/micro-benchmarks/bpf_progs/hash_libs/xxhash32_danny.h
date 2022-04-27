@@ -178,7 +178,7 @@ static __always_inline uint32_t xxhash32_short(const void* input, const uint32_t
 }
 
 
-static inline uint32_t xxhash32(const void* input, const uint32_t totalLength, const uint32_t seed){
+static __attribute__((always_inline)) inline uint32_t xxhash32(const void* input, const uint32_t totalLength, const uint32_t seed){
     if(totalLength>=1 && totalLength<MaxBufferSize)
         return xxhash32_short(input,totalLength,seed);
     return  xxhash32_anylength(input,totalLength,seed);

@@ -16,7 +16,7 @@ void inline __attribute__((__always_inline__))
 print_results(struct timespec *tstart, struct timespec *tend, uint64_t N,
               volatile uint32_t hashvalue) {
 #endif
-  printf("Hash calc took about %.5f seconds, final value=%d\n",
+  printf("Hash calc took about %.5f seconds, final value=%u\n",
          ((double)tend->tv_sec + 1.0e-9 * tend->tv_nsec) -
              ((double)tstart->tv_sec + 1.0e-9 * tstart->tv_nsec),
          hashvalue);

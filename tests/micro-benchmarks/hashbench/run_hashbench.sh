@@ -10,6 +10,12 @@ SIMD_BIN_FOLDER="bin-simd"
 NO_SIMD_BIN_FOLDER="bin-no-simd"
 OBJ_DUMP_FOLDER="obj-dump"
 
+COMPILER=clang
+OBJDUMP=llvm-objdump
+
+# COMPILER=gcc-11
+# OBJDUMP=objdump
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function show_help() {
@@ -55,54 +61,71 @@ function dump_assembly_code() {
     mkdir -p ${OBJ_DUMP_FOLDER}
 
     # JHASH
-    objdump -f -d ${SIMD_BIN_FOLDER}/bench_jhash-simd-on > ${OBJ_DUMP_FOLDER}/bench_jhash-simd-on.dump
-    objdump -f -d ${NO_SIMD_BIN_FOLDER}/bench_jhash-simd-off > ${OBJ_DUMP_FOLDER}/bench_jhash-simd-off.dump
+    $OBJDUMP -f -d -S ${SIMD_BIN_FOLDER}/bench_jhash-simd-on > ${OBJ_DUMP_FOLDER}/bench_jhash-simd-on.dump
+    $OBJDUMP -f -d -S ${NO_SIMD_BIN_FOLDER}/bench_jhash-simd-off > ${OBJ_DUMP_FOLDER}/bench_jhash-simd-off.dump
 
     # LITTLEHASH
-    objdump -f -d ${SIMD_BIN_FOLDER}/bench_littlehash-simd-on > ${OBJ_DUMP_FOLDER}/bench_littlehash-simd-on.dump
-    objdump -f -d ${NO_SIMD_BIN_FOLDER}/bench_littlehash-simd-off > ${OBJ_DUMP_FOLDER}/bench_littlehash-simd-off.dump
+    $OBJDUMP -f -d -S ${SIMD_BIN_FOLDER}/bench_littlehash-simd-on > ${OBJ_DUMP_FOLDER}/bench_littlehash-simd-on.dump
+    $OBJDUMP -f -d -S ${NO_SIMD_BIN_FOLDER}/bench_littlehash-simd-off > ${OBJ_DUMP_FOLDER}/bench_littlehash-simd-off.dump
 
     # FASTHASH
-    objdump -f -d ${SIMD_BIN_FOLDER}/bench_fasthash-simd-on > ${OBJ_DUMP_FOLDER}/bench_fasthash-simd-on.dump
-    objdump -f -d ${NO_SIMD_BIN_FOLDER}/bench_fasthash-simd-off > ${OBJ_DUMP_FOLDER}/bench_fasthash-simd-off.dump
+    $OBJDUMP -f -d -S ${SIMD_BIN_FOLDER}/bench_fasthash-simd-on > ${OBJ_DUMP_FOLDER}/bench_fasthash-simd-on.dump
+    $OBJDUMP -f -d -S ${NO_SIMD_BIN_FOLDER}/bench_fasthash-simd-off > ${OBJ_DUMP_FOLDER}/bench_fasthash-simd-off.dump
 
     # CSIPHASH
-    objdump -f -d ${SIMD_BIN_FOLDER}/bench_csiphash-simd-on > ${OBJ_DUMP_FOLDER}/bench_csiphash-simd-on.dump
-    objdump -f -d ${NO_SIMD_BIN_FOLDER}/bench_csiphash-simd-off > ${OBJ_DUMP_FOLDER}/bench_csiphash-simd-off.dump
+    $OBJDUMP -f -d -S ${SIMD_BIN_FOLDER}/bench_csiphash-simd-on > ${OBJ_DUMP_FOLDER}/bench_csiphash-simd-on.dump
+    $OBJDUMP -f -d -S ${NO_SIMD_BIN_FOLDER}/bench_csiphash-simd-off > ${OBJ_DUMP_FOLDER}/bench_csiphash-simd-off.dump
 
     # XXHASH32
-    objdump -f -d ${SIMD_BIN_FOLDER}/bench_xxhash32-simd-on > ${OBJ_DUMP_FOLDER}/bench_xxhash32-simd-on.dump
-    objdump -f -d ${NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off > ${OBJ_DUMP_FOLDER}/bench_xxhash32-simd-off.dump
+    $OBJDUMP -f -d -S ${SIMD_BIN_FOLDER}/bench_xxhash32-simd-on > ${OBJ_DUMP_FOLDER}/bench_xxhash32-simd-on.dump
+    $OBJDUMP -f -d -S ${NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off > ${OBJ_DUMP_FOLDER}/bench_xxhash32-simd-off.dump
+
+    # XXHASH32_DANNY
+    $OBJDUMP -f -d -S ${SIMD_BIN_FOLDER}/bench_xxhash32_danny-simd-on > ${OBJ_DUMP_FOLDER}/bench_xxhash32_danny-simd-on.dump
+    $OBJDUMP -f -d -S ${NO_SIMD_BIN_FOLDER}/bench_xxhash32_danny-simd-off > ${OBJ_DUMP_FOLDER}/bench_xxhash32_danny-simd-off.dump
+
+    # MURMURHASH3
+    $OBJDUMP -f -d -S ${SIMD_BIN_FOLDER}/bench_murmurhash3-simd-on > ${OBJ_DUMP_FOLDER}/bench_murmurhash3-simd-on.dump
+    $OBJDUMP -f -d -S ${NO_SIMD_BIN_FOLDER}/bench_murmurhash3-simd-off > ${OBJ_DUMP_FOLDER}/bench_murmurhash3-simd-off.dump
 
     echo "Objects dumped"
 }
 
-NO_SIMD_FLAGS="-fno-tree-vectorize -mno-mmx -mno-sse -mno-avx -mno-avx512f"
-SIMD_FLAGS="-O3 -march=native -msse2 -ffast-math"
+NO_SIMD_FLAGS="-O3 -DNO_SIMD -fno-tree-vectorize -mno-mmx -mno-sse -mno-avx -mno-avx512f"
+# SIMD_FLAGS="-O3 -march=native -msse2 -ffast-math"
+SIMD_FLAGS="-O3 -march=native"
 function compile_programs() {
     rm -rf ${SIMD_BIN_FOLDER}
     rm -rf ${NO_SIMD_BIN_FOLDER}
     mkdir -p ${SIMD_BIN_FOLDER}
     mkdir -p ${NO_SIMD_BIN_FOLDER}
     # JHASH
-    gcc $1 -flto ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_jhash.c -o ${SIMD_BIN_FOLDER}/bench_jhash-simd-on
-    gcc $1 -flto -O3 -DNO_SIMD ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_jhash.c -o ${NO_SIMD_BIN_FOLDER}/bench_jhash-simd-off
+    $COMPILER $1 ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_jhash.c -o ${SIMD_BIN_FOLDER}/bench_jhash-simd-on
+    $COMPILER $1 ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_jhash.c -o ${NO_SIMD_BIN_FOLDER}/bench_jhash-simd-off
 
     # LITTLEHASH
-    gcc $1 -flto ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_littlehash.c -o ${SIMD_BIN_FOLDER}/bench_littlehash-simd-on
-    gcc $1 -flto -O3 -DNO_SIMD ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_littlehash.c -o ${NO_SIMD_BIN_FOLDER}/bench_littlehash-simd-off
+    $COMPILER $1 ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_littlehash.c -o ${SIMD_BIN_FOLDER}/bench_littlehash-simd-on
+    $COMPILER $1 ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_littlehash.c -o ${NO_SIMD_BIN_FOLDER}/bench_littlehash-simd-off
 
     # FASTHASH
-    gcc $1 -flto ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_fasthash.c -o ${SIMD_BIN_FOLDER}/bench_fasthash-simd-on
-    gcc $1 -flto -O3 -DNO_SIMD ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_fasthash.c -o ${NO_SIMD_BIN_FOLDER}/bench_fasthash-simd-off
+    $COMPILER $1 ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_fasthash.c -o ${SIMD_BIN_FOLDER}/bench_fasthash-simd-on
+    $COMPILER $1 ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_fasthash.c -o ${NO_SIMD_BIN_FOLDER}/bench_fasthash-simd-off
 
     # CSIPHASH
-    gcc $1 -flto ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_csiphash.c -o ${SIMD_BIN_FOLDER}/bench_csiphash-simd-on
-    gcc $1 -flto -O3 -DNO_SIMD ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_csiphash.c -o ${NO_SIMD_BIN_FOLDER}/bench_csiphash-simd-off
+    $COMPILER $1 ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_csiphash.c -o ${SIMD_BIN_FOLDER}/bench_csiphash-simd-on
+    $COMPILER $1 ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_csiphash.c -o ${NO_SIMD_BIN_FOLDER}/bench_csiphash-simd-off
 
     # XXHASH32
-    gcc $1 -flto ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_xxhash32.c -o ${SIMD_BIN_FOLDER}/bench_xxhash32-simd-on
-    gcc $1 -flto -O3 -DNO_SIMD ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_xxhash32.c -o ${NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off
+    $COMPILER $1 ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_xxhash32.c -o ${SIMD_BIN_FOLDER}/bench_xxhash32-simd-on
+    $COMPILER $1 ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_xxhash32.c -o ${NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off
+
+    # XXHASH32_DANNY
+    $COMPILER $1 ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_xxhash32_danny.c -o ${SIMD_BIN_FOLDER}/bench_xxhash32_danny-simd-on
+    $COMPILER $1 ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_xxhash32_danny.c -o ${NO_SIMD_BIN_FOLDER}/bench_xxhash32_danny-simd-off
+
+    # MURMURHASH3
+    $COMPILER $1 ${SIMD_FLAGS} -I../bpf_progs/hash_libs bench_murmurhash3.c -o ${SIMD_BIN_FOLDER}/bench_murmurhash3-simd-on
+    $COMPILER $1 ${NO_SIMD_FLAGS} -I../bpf_progs/hash_libs bench_murmurhash3.c -o ${NO_SIMD_BIN_FOLDER}/bench_murmurhash3-simd-off
 
     echo "Programs compiled"
 }
@@ -126,14 +149,14 @@ rm -rf results
 mkdir results
 
 # JHASH
-for i in {1..$NUMBER_RUNS}
+for (( c=1; c<=$NUMBER_RUNS; c++ ))
 do
-    if [ "$SIMD_TEST" = true ] ; then
+    if [ "$SIMD_TEST" = true ]; then
         sudo ./${SIMD_BIN_FOLDER}/bench_jhash-simd-on |& tee -a results/exp-JHASH-simd.log
         echo "" |& tee -a results/exp-JHASH-simd.log
         sleep 5
     fi
-    if [ "$NO_SIMD_TEST" = true ] ; then
+    if [ "$NO_SIMD_TEST" = true ]; then
         sudo ./${NO_SIMD_BIN_FOLDER}/bench_jhash-simd-off |& tee -a results/exp-JHASH-simd-off.log
         echo "" |& tee -a results/exp-JHASH-simd-off.log
         sleep 5
@@ -141,7 +164,7 @@ do
 done
 
 # LITTLEHASH
-for i in {1..$NUMBER_RUNS}
+for (( c=1; c<=$NUMBER_RUNS; c++ ))
 do
     if [ "$SIMD_TEST" = true ] ; then
         sudo ./${SIMD_BIN_FOLDER}/bench_littlehash-simd-on |& tee -a results/exp-LITTLEHASH-simd.log
@@ -156,7 +179,7 @@ do
 done
 
 # FASTHASH
-for i in {1..$NUMBER_RUNS}
+for (( c=1; c<=$NUMBER_RUNS; c++ ))
 do
     if [ "$SIMD_TEST" = true ] ; then
         sudo ./${SIMD_BIN_FOLDER}/bench_fasthash-simd-on |& tee -a results/exp-FASTHASH-simd.log
@@ -171,7 +194,7 @@ do
 done
 
 # CSIPHASH
-for i in {1..$NUMBER_RUNS}
+for (( c=1; c<=$NUMBER_RUNS; c++ ))
 do
     if [ "$SIMD_TEST" = true ] ; then
         sudo ./${SIMD_BIN_FOLDER}/bench_csiphash-simd-on |& tee -a results/exp-CSIPHASH-simd.log
@@ -186,7 +209,7 @@ do
 done
 
 # XXHASH32
-for i in {1..$NUMBER_RUNS}
+for (( c=1; c<=$NUMBER_RUNS; c++ ))
 do
     if [ "$SIMD_TEST" = true ] ; then
         sudo ./${SIMD_BIN_FOLDER}/bench_xxhash32-simd-on |& tee -a results/exp-XXHASH32-simd.log
@@ -196,6 +219,36 @@ do
     if [ "$NO_SIMD_TEST" = true ] ; then
         sudo ./${NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off |& tee -a results/exp-XXHASH32-simd-off.log
         echo "" |& tee -a results/exp-XXHASH32-simd-off.log
+        sleep 5
+    fi
+done
+
+# XXHASH32_DANNY
+for (( c=1; c<=$NUMBER_RUNS; c++ ))
+do
+    if [ "$SIMD_TEST" = true ] ; then
+        sudo ./${SIMD_BIN_FOLDER}/bench_xxhash32_danny-simd-on |& tee -a results/exp-XXHASH32_DANNY-simd.log
+        echo "" |& tee -a results/exp-XXHASH32_DANNY-simd.log
+        sleep 5
+    fi
+    if [ "$NO_SIMD_TEST" = true ] ; then
+        sudo ./${NO_SIMD_BIN_FOLDER}/bench_xxhash32_danny-simd-off |& tee -a results/exp-XXHASH32_DANNY-simd-off.log
+        echo "" |& tee -a results/exp-XXHASH32_DANNY-simd-off.log
+        sleep 5
+    fi
+done
+
+# MURMURHASH3
+for (( c=1; c<=$NUMBER_RUNS; c++ ))
+do
+    if [ "$SIMD_TEST" = true ] ; then
+        sudo ./${SIMD_BIN_FOLDER}/bench_murmurhash3-simd-on |& tee -a results/exp-MURMURHASH3-simd.log
+        echo "" |& tee -a results/exp-MURMURHASH3-simd.log
+        sleep 5
+    fi
+    if [ "$NO_SIMD_TEST" = true ] ; then
+        sudo ./${NO_SIMD_BIN_FOLDER}/bench_murmurhash3-simd-off |& tee -a results/exp-MURMURHASH3-simd-off.log
+        echo "" |& tee -a results/exp-MURMURHASH3-simd-off.log
         sleep 5
     fi
 done

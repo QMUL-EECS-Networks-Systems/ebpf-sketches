@@ -6,7 +6,7 @@
 #include "stdint.h"
 #include "time.h"
 
-#include "csiphash.h"
+#include "murmurhash3.h"
 #include "utils.h"
 
 struct pkt_5tuple {
@@ -18,7 +18,7 @@ struct pkt_5tuple {
 } __attribute__((packed));
 
 int main() {
-  printf("Hello, world CSIPHASH.\n");
+  printf("Hello, world. MURMURHASH3\n");
 
   struct pkt_5tuple pkt;
 
@@ -29,21 +29,16 @@ int main() {
   pkt.proto = 6;
 
   const uint64_t N = 1000 * 1000 * 1000;
-  volatile uint64_t hashvalue = 0; // uint32_t
-  for (uint64_t i = 0; i < N; i += 20) {
-    unsigned char value[16] = {0};
-    __builtin_memcpy(value, &i, sizeof(i));
-    hashvalue ^= siphash24((void *)&pkt, sizeof(pkt), (const char*) value); // warmup
-  }
+  volatile uint32_t hashvalue = 0; // uint32_t
+  for (uint64_t i = 0; i < N; i += 20)
+    hashvalue ^= MurmurHash3_x86_32((void *)&pkt, sizeof(pkt), i); // warmup
 
   struct timespec tstart = {0, 0}, tend = {0, 0};
   clock_gettime(CLOCK_MONOTONIC, &tstart);
   {
-    for (uint64_t i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) {
       pkt.src_ip = i;
-      unsigned char value[16] = {0};
-      __builtin_memcpy(value, &i, sizeof(i));
-      hashvalue ^= siphash24((void *)&pkt, sizeof(pkt), (const char*) value);
+      hashvalue ^= MurmurHash3_x86_32((void *)&pkt, sizeof(pkt), i * i);
     }
   }
   clock_gettime(CLOCK_MONOTONIC, &tend);
