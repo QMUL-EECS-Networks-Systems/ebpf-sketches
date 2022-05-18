@@ -1,0 +1,10 @@
+outputhashbench_ebpf*
+outputrandrate*
+hashbench/clang-bin-no-simd/
+hashbench/gcc-bin-no-simd/
+hashbench/clang-bin-simd/
+hashbench/gcc-bin-simd/
+hashbench/obj-dump*
+hashbench/results*
+dump-ebpf/
+hash-perf-ebpf/

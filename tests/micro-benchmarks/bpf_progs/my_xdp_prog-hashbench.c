@@ -47,7 +47,7 @@ struct pkt_ippair {
 } __attribute__((packed));
 
 struct pkt_5tuple {
-  __be32 src_ip;
+  volatile __be32 src_ip;
   __be32 dst_ip;
   __be16 src_port;
   __be16 dst_port;
@@ -118,37 +118,37 @@ int xdp_prog1(struct xdp_md *ctx) {
     pkt.proto=6;
 #endif
     
-    uint64_t N = _HASH_CYCLES;
+    const uint64_t N = _HASH_CYCLES;
     volatile uint32_t hashvalue = _HASH_START_VALUE;
 #if _HASH_NUM == 0
 // Using unroll the hash calculation is a LOT faster then with normal loop
 // #pragma clang loop unroll(full)
     for(int i = 0; i < N; i++) {
-        pkt.src_ip=i;
+        pkt.src_ip=hashvalue;
         hashvalue ^= jhash(&pkt, sizeof(pkt), i*i);
     }
 #elif _HASH_NUM == 1
 // #pragma clang loop unroll(full)
     for(int i = 0; i < N; i++) {
-        pkt.src_ip=i;
+        pkt.src_ip=hashvalue;
         hashvalue ^= hashlittle(&pkt, sizeof(pkt), i*i);
     }
 #elif _HASH_NUM == 2
 // #pragma clang loop unroll(full)
     for(int i = 0; i < N; i++) {
-        pkt.src_ip=i;
+        pkt.src_ip=hashvalue;
         hashvalue ^= fasthash32(&pkt, sizeof(pkt), i*i);
     }
 #elif _HASH_NUM == 3
 // #pragma clang loop unroll(full)
     for(int i = 0; i < N; i++) {
-        pkt.src_ip=i;
+        pkt.src_ip=hashvalue;
         hashvalue ^= xxhash32(&pkt, sizeof(pkt), i*i);
     }
 #elif _HASH_NUM == 4
 // #pragma clang loop unroll(full)
     for(int i = 0; i < N; i++) {
-        pkt.src_ip=i;
+        pkt.src_ip=hashvalue;
         unsigned char value[16] = {0};
         __builtin_memcpy(value, &i, sizeof(i));
         hashvalue ^= siphash24(&pkt, sizeof(pkt), value);
@@ -156,13 +156,13 @@ int xdp_prog1(struct xdp_md *ctx) {
 #elif _HASH_NUM == 5
 // #pragma clang loop unroll(full)
     for(int i = 0; i < N; i++) {
-        pkt.src_ip=i;
+        pkt.src_ip=hashvalue;
         hashvalue ^= xxhash32(&pkt, sizeof(pkt), i*i);
     }
 #elif _HASH_NUM == 6
 // #pragma clang loop unroll(full)
     for(int i = 0; i < N; i++) {
-        pkt.src_ip=i;
+        pkt.src_ip=hashvalue;
         hashvalue ^= MurmurHash3_x86_32(&pkt, sizeof(pkt), i*i);
     }
 #endif

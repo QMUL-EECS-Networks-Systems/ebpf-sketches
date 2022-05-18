@@ -10,7 +10,7 @@
 #include "utils.h"
 
 struct pkt_5tuple {
-  __be32 src_ip;
+  volatile __be32 src_ip;
   __be32 dst_ip;
   __be16 src_port;
   __be16 dst_port;
@@ -40,7 +40,7 @@ int main() {
   clock_gettime(CLOCK_MONOTONIC, &tstart);
   {
     for (uint64_t i = 0; i < N; i++) {
-      pkt.src_ip = i;
+      pkt.src_ip = hashvalue;
       unsigned char value[16] = {0};
       __builtin_memcpy(value, &i, sizeof(i));
       hashvalue ^= siphash24((void *)&pkt, sizeof(pkt), (const char*) value);
