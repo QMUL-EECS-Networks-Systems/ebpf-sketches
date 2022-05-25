@@ -64,7 +64,7 @@ int xdp_prog1(struct xdp_md *ctx) {
     ippair.dst_ip=pkt.dst_ip = ip->daddr;
     pkt.proto = ip->protocol;
     
-    __u32 rndval = 0;
+    volatile __u32 rndval = 0;
     __u32 atom;
 
     const uint64_t N = _RAND_CYCLES;

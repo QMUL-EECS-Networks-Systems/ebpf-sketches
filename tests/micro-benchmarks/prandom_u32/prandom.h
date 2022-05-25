@@ -16,8 +16,10 @@ typedef unsigned long long __u64;
 static inline __u64 rol64(__u64 word, unsigned int shift)
 { return (word << (shift & 63)) | (word >> ((-shift) & 63)); }
 
+#ifdef __cplusplus
 #include <cstddef>
 using std::size_t;
+#endif
 
 u32 prandom_u32(void);
 void prandom_bytes(void *buf, size_t nbytes);
@@ -63,10 +65,6 @@ struct rnd_state {
 
 u32 prandom_u32_state(struct rnd_state *state);
 void prandom_bytes_state(struct rnd_state *state, void *buf, size_t nbytes);
-void prandom_seed_full_state(struct rnd_state *pcpu_state);
-
-#define prandom_init_once(pcpu_state)			\
-	DO_ONCE(prandom_seed_full_state, (pcpu_state))
 
 /**
  * prandom_u32_max - returns a pseudo-random number in interval [0, ep_ro)

@@ -76,10 +76,6 @@ def run_experiment_ht(cycles):
     cf.append("-I/usr/include/linux")
 
     print('running, write to', outputfn, ' and flags=', cf)
-    if not os.path.exists("outputrandrate"):
-        os.mkdir("outputrandrate")
-    else:
-        shutil.rmtree('/folder_name', ignore_errors=True)
 
     for _ in range(5):
         max_randrate=one_run(cf, cycles, test_duration)
@@ -93,6 +89,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     test_duration = args.duration
+    
+    if os.path.exists("outputrandrate"):
+        shutil.rmtree('outputrandrate', ignore_errors=True)
+
+    os.mkdir("outputrandrate")
     
     for rand_cycles in [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]:
         run_experiment_ht(rand_cycles)
