@@ -1,5 +1,4 @@
-outputhashbench_ebpf*
-outputrandrate*
+output*
 hashbench/clang-bin-no-simd/
 hashbench/gcc-bin-no-simd/
 hashbench/clang-bin-simd/
