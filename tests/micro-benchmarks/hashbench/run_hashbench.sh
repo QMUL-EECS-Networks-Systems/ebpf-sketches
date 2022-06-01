@@ -157,6 +157,9 @@ function compile_programs_cpp() {
     $1 $4 ${SIMD_FLAGS} -I../hashbench bench_xxhash32_parallel.cc -o ${2}/bench_xxhash32_parallel-simd-on
     $1 $4 ${NO_SIMD_FLAGS} -I../hashbench bench_xxhash32_parallel.cc -o ${3}/bench_xxhash32_parallel-simd-off
 
+    # MURMUR3_PARALLEL
+    $1 $4 ${SIMD_FLAGS} -I../hashbench bench_murmurhash3_parallel.cc -o ${2}/bench_murmurhash3_parallel-simd-on
+
     echo "CPP Programs compiled"
 }
 
@@ -299,27 +302,27 @@ do
     done
 
     # XXHASH32
-    for (( c=1; c<=$NUMBER_RUNS; c++ ))
-    do
-        if [ "$SIMD_TEST" = true ] ; then
-            echo "GCC:"
-            sudo ./${GCC_SIMD_BIN_FOLDER}/bench_xxhash32-simd-on |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd.log
-            echo "CLANG:"
-            sudo ./${CLANG_SIMD_BIN_FOLDER}/bench_xxhash32-simd-on |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd.log
-            echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd.log
-            echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd.log
-            sleep 5
-        fi
-        if [ "$NO_SIMD_TEST" = true ] ; then
-            echo "GCC NO-SIMD"
-            sudo ./${GCC_NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
-            echo "CLANG NO-SIMD"
-            sudo ./${CLANG_NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
-            echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
-            echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
-            sleep 5
-        fi
-    done
+    # for (( c=1; c<=$NUMBER_RUNS; c++ ))
+    # do
+    #     if [ "$SIMD_TEST" = true ] ; then
+    #         echo "GCC:"
+    #         sudo ./${GCC_SIMD_BIN_FOLDER}/bench_xxhash32-simd-on |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd.log
+    #         echo "CLANG:"
+    #         sudo ./${CLANG_SIMD_BIN_FOLDER}/bench_xxhash32-simd-on |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd.log
+    #         echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd.log
+    #         echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd.log
+    #         sleep 5
+    #     fi
+    #     if [ "$NO_SIMD_TEST" = true ] ; then
+    #         echo "GCC NO-SIMD"
+    #         sudo ./${GCC_NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
+    #         echo "CLANG NO-SIMD"
+    #         sudo ./${CLANG_NO_SIMD_BIN_FOLDER}/bench_xxhash32-simd-off |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
+    #         echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
+    #         echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32-simd-off.log
+    #         sleep 5
+    #     fi
+    # done
 
     # XXHASH32_DANNY
     for (( c=1; c<=$NUMBER_RUNS; c++ ))
@@ -340,6 +343,29 @@ do
             sudo ./${CLANG_NO_SIMD_BIN_FOLDER}/bench_xxhash32_danny-simd-off |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_DANNY-simd-off.log
             echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_DANNY-simd-off.log
             echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_DANNY-simd-off.log
+            sleep 5
+        fi
+    done
+
+    # XXHASH32_PARALLEL
+    for (( c=1; c<=$NUMBER_RUNS; c++ ))
+    do
+        if [ "$SIMD_TEST" = true ] ; then
+            echo "GCC:"
+            sudo ./${GCC_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-on |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
+            echo "CLANG:"
+            sudo ./${CLANG_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-on |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
+            echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
+            echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
+            sleep 5
+        fi
+        if [ "$NO_SIMD_TEST" = true ] ; then
+            echo "GCC NO-SIMD"
+            sudo ./${GCC_NO_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-off |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
+            echo "CLANG NO-SIMD"
+            sudo ./${CLANG_NO_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-off |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
+            echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
+            echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
             sleep 5
         fi
     done
@@ -367,28 +393,22 @@ do
         fi
     done
 
-    # XXHASH32_PARALLEL
+
+    # MURMURHASH3_PARALLEL
     for (( c=1; c<=$NUMBER_RUNS; c++ ))
     do
         if [ "$SIMD_TEST" = true ] ; then
             echo "GCC:"
-            sudo ./${GCC_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-on |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
+            sudo ./${GCC_SIMD_BIN_FOLDER}/bench_murmurhash3_parallel-simd-on |& tee -a ${GCC_RESULT_FOLDER}/exp-MURMURHASH3_PARALLEL-simd.log
             echo "CLANG:"
-            sudo ./${CLANG_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-on |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
-            echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
-            echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd.log
-            sleep 5
-        fi
-        if [ "$NO_SIMD_TEST" = true ] ; then
-            echo "GCC NO-SIMD"
-            sudo ./${GCC_NO_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-off |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
-            echo "CLANG NO-SIMD"
-            sudo ./${CLANG_NO_SIMD_BIN_FOLDER}/bench_xxhash32_parallel-simd-off |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
-            echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
-            echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-XXHASH32_PARALLEL-simd-off.log
+            sudo ./${CLANG_SIMD_BIN_FOLDER}/bench_murmurhash3_parallel-simd-on |& tee -a ${CLANG_RESULT_FOLDER}/exp-MURMURHASH3_PARALLEL-simd.log
+            echo "" |& tee -a ${GCC_RESULT_FOLDER}/exp-MURMURHASH3_PARALLEL-simd.log
+            echo "" |& tee -a ${CLANG_RESULT_FOLDER}/exp-MURMURHASH3_PARALLEL-simd.log
             sleep 5
         fi
     done
+
+    
 done
 
 popd
