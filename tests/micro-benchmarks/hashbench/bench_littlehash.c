@@ -15,7 +15,7 @@ struct pkt_5tuple {
   __be16 src_port;
   __be16 dst_port;
   uint8_t proto;
-} __attribute__((packed));
+};
 
 int main() {
   printf("Hello, world. LITTLEHASH\n");
