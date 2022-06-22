@@ -25,9 +25,9 @@
 #include "csiphash.h"
 #elif _HASH_NUM == 5
 #include "xxhash32_danny.h"
+#elif _HASH_NUM == 6
+#include "murmurhash3.h"
 #endif
-
-
 
 BPF_TABLE( MAPTYPE, uint32_t, long, dropcnt, 256);
 
@@ -121,7 +121,7 @@ int xdp_prog1(struct xdp_md *ctx) {
     }
         
 #if _HASH_NUM == 0
-    volatile uint32_t hashvalue = 0;
+    uint32_t hashvalue = 0;
     #if _NUM_HASHES > 0
         hashvalue ^= jhash(&pkt, sizeof(pkt), 0x12344321);
     #endif
@@ -245,6 +245,27 @@ int xdp_prog1(struct xdp_md *ctx) {
 
     #if _NUM_HASHES > 4
         hashvalue ^= xxhash32(&pkt, sizeof(pkt), 0x6a5d1f0e);
+    #endif
+#elif _HASH_NUM == 6
+    uint32_t hashvalue = 0;
+    #if _NUM_HASHES > 0
+        hashvalue ^= MurmurHash3_x86_32(&pkt, sizeof(pkt), 0x12344321);
+    #endif
+
+    #if _NUM_HASHES > 1
+        hashvalue ^= MurmurHash3_x86_32(&pkt, sizeof(pkt), 0x22344323);
+    #endif
+
+    #if _NUM_HASHES > 2
+        hashvalue ^= MurmurHash3_x86_32(&pkt, sizeof(pkt), 0x92344139);
+    #endif
+
+    #if _NUM_HASHES > 3
+        hashvalue ^= MurmurHash3_x86_32(&pkt, sizeof(pkt), 0x78234321);
+    #endif
+
+    #if _NUM_HASHES > 4
+        hashvalue ^= MurmurHash3_x86_32(&pkt, sizeof(pkt), 0x6a5d1f0e);
     #endif
 #endif
 

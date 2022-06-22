@@ -78,7 +78,7 @@ def run_experiment_ht(hname, hnum, num_hashes):
             f.write(f'{maxpps}\n')
             
 i = 0
-for hash_name in ['JHASH', 'HASHLITTLE', 'FASTHASH32', 'XXHASH32', 'CSIPHASH', 'XXHASH32_DANNY']:
+for hash_name in ['JHASH', 'HASHLITTLE', 'FASTHASH32', 'XXHASH32', 'CSIPHASH', 'XXHASH32_DANNY', 'MURMURHASH3']:
     for num in range(6):
         run_experiment_ht(hash_name, i, num)
     i+=1
