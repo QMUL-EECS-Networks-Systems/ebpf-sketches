@@ -29,6 +29,9 @@
 #include <uapi/linux/types.h>
 #include <stddef.h>
 
+#define HASHFN_N _CS_ROWS
+#define COLUMNS _CS_COLUMNS
+
 #include "common.h"
 #include "xxhash32.h"
 
@@ -48,9 +51,6 @@ struct topk_entry {
 struct pkt_md {
   uint64_t drop_cnt;
 };
-
-#define HASHFN_N _CS_ROWS
-#define COLUMNS _CS_COLUMNS
 
 _Static_assert((COLUMNS & (COLUMNS - 1)) == 0, "COLUMNS must be a power of two");
 

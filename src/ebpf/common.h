@@ -142,6 +142,10 @@ static uint32_t leftmost_ones5(uint32_t x)
     return numIntBits - (x & 0x0000003f); 
 }
 
+static int average_without_overflow(int a, int b) {
+    return (a & b) + ((a ^ b) >> 1);
+}
+
 static int __always_inline median(int *vect, int len) {
     int temp;
     int i, j;
@@ -160,7 +164,8 @@ static int __always_inline median(int *vect, int len) {
 
     if(len % 2 == 0) {
         // if there is an even number of elements, return mean of the two elements in the middle
-        return((vect[len/2] + vect[len/2 - 1]) / 2);
+        // return((vect[len/2] + vect[len/2 - 1]) / 2);
+        average_without_overflow(vect[len/2], vect[len/2 - 1]);
     } else {
         // else return the element in the middle
         return vect[len/2];

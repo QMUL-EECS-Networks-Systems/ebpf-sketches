@@ -30,6 +30,9 @@
 #include <linux/if_vlan.h>
 #include <stddef.h>
 
+#define HASHFN_N _CS_ROWS
+#define COLUMNS _CS_COLUMNS
+
 #include "common.h"
 #include "fasthash.h"
 
@@ -57,9 +60,6 @@ struct pkt_md {
 #endif
   uint32_t geo_sampling_array[MAX_GEOSAMPLING_SIZE];
 };
-
-#define HASHFN_N _CS_ROWS
-#define COLUMNS _CS_COLUMNS
 
 _Static_assert((COLUMNS & (COLUMNS - 1)) == 0, "COLUMNS must be a power of two");
 
@@ -104,7 +104,7 @@ static int __always_inline query_sketch_with_hash(struct countsketch *cs, uint16
 	}	// TREAP (min heap)
 
 	// Median return value should be float. We are loosing something here
-	return median(value, ARRAY_SIZE(value));
+    return median(value, ARRAY_SIZE(value));
 }
 
 static int __always_inline compare_pkt_struct(struct pkt_5tuple *origin_pkt, struct pkt_5tuple *new_pkt) {
