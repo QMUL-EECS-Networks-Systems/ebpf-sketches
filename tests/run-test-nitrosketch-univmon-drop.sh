@@ -22,8 +22,6 @@ do
 
    for i in "${SEEDS[@]}"
    do
-      sudo ./scripts/setup_flow_director_single_core.sh ${IFACE}
-
       rand=$i
       echo "Result for probability: ${p}, seed: ${rand}" |& tee -a ${new_dir_name}/output.txt
       result=$(timeout -s SIGINT 120 sudo python3 nitrosketch-univmon.py -i ${IFACE} -p ${p} --read ${TEST_DURATION} -s ${rand} -q --count-bytes --count-pkts)
@@ -34,9 +32,6 @@ do
    done
 done
 popd
-
-sudo ethtool --features ${IFACE} ntuple off
-sudo ethtool --features ${IFACE} ntuple on
 
 if [ -z "${1}" ]; then
     echo "Done!"

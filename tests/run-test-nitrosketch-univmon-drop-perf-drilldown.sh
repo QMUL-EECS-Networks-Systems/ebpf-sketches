@@ -15,6 +15,7 @@ declare -a arr=("nitrosketch-univmon-conf1.py"
                 "nitrosketch-univmon-conf3.py"
                 "nitrosketch-univmon-conf4.py"
                 "nitrosketch-univmon-conf5.py"
+                "nitrosketch-univmon-conf6.py"
                 )
 
 pushd ..

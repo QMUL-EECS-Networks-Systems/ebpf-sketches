@@ -15,9 +15,8 @@ declare -a arr=("nitrosketch-conf1.py"
                 "nitrosketch-conf3.py"
                 "nitrosketch-conf4.py"
                 "nitrosketch-conf5.py"
+                "nitrosketch-conf6.py"
                 )
-
-sudo ./setup_flow_director_single_core.sh ${IFACE}
 
 pushd ..
 
@@ -46,9 +45,6 @@ do
     done
 done
 popd
-
-sudo ethtool --features ${IFACE} ntuple off
-sudo ethtool --features ${IFACE} ntuple on
 
 if [ -z "${1}" ]; then
     echo "Done!"
