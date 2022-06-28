@@ -22,9 +22,11 @@ import socket
 import heapq
 import ipaddress
 import copy
+import subprocess
 
 FAST_HASH_FILE = f"{sys.path[0]}/../src/hash_lib/libfasthash.so"
 LOOKUP3_HASH_FILE = f"{sys.path[0]}/../src/hash_lib/liblookup3.so"
+IRQ_AFFINITY_FILE = f"{sys.path[0]}/../scripts/set_irq_affinity.sh"
 
 SEED_HASHFN1 = 0x2d31e867
 SEED_HASHFN2 = 0x6ad611c4
@@ -178,6 +180,8 @@ if __name__ == '__main__':
         ip.tc("add", "clsact", idx)
         ip.tc("add-filter", "bpf", idx, ":1", fd=fn.fd, name=fn.name,
             parent="ffff:fff2", classid=1, direct_action=True)
+
+    rc = subprocess.call(f"{IRQ_AFFINITY_FILE} local {device}", shell=True)
 
     try:
         if not args.quiet : print("Ready, please insert a new command (type 'help' for the full list)")

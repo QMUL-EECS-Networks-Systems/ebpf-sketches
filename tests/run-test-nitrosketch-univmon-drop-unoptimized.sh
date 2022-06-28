@@ -25,8 +25,9 @@ do
    for i in "${SEEDS[@]}"
    do
       rand=$i
+      sudo ./scripts/set_irq_affinity.sh local ${IFACE}
       echo "Result for probability: ${p}, seed: ${rand}" |& tee -a ${new_dir_name}/output.txt
-      result=$(timeout -s SIGINT 120 sudo python3 ${SCRIPT_BASE_DIR}/nitrosketch-univmon-conf1.py -i ${IFACE} -p ${p} --read ${TEST_DURATION} -s ${rand} -q)
+      result=$(timeout -s SIGINT 120 sudo python3 ${SCRIPT_BASE_DIR}/nitrosketch-univmon-conf2.py -i ${IFACE} -p ${p} --read ${TEST_DURATION} -s ${rand} -q)
       echo "${result}" |& tee -a ${new_dir_name}/output.txt
       echo "${p},${result},${i}" &>> ${new_dir_name}/${file_name}.log
       echo "" |& tee -a ${new_dir_name}/output.txt

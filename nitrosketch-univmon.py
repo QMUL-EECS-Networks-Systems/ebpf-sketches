@@ -22,8 +22,11 @@ import socket
 import os
 import copy
 import errno
+import subprocess
 
 FAST_HASH_FILE = "src/hash_lib/libfasthash.so"
+IRQ_AFFINITY_FILE = f"{sys.path[0]}/scripts/set_irq_affinity.sh"
+
 SEED_HASHFN = 0x2d31e867
 SEED_LAYERHASH = 0xdeadbeef
 CS_ROWS = 4
@@ -328,6 +331,8 @@ if __name__ == '__main__':
         ip.tc("add", "clsact", idx)
         ip.tc("add-filter", "bpf", idx, ":1", fd=fn.fd, name=fn.name,
             parent="ffff:fff2", classid=1, direct_action=True)
+
+    rc = subprocess.call(f"{IRQ_AFFINITY_FILE} local {device} > /dev/null 2>&1", shell=True)
 
     try:
         if not args.quiet : print("Ready, please insert a new command (type 'help' for the full list)")
