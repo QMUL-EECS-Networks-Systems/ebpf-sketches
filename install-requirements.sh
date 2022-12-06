@@ -62,7 +62,8 @@ get_install_bcc() {
   git apply ${DIR}/bcc-patch.patch
   mkdir -p "$BCC_BUILD_DIR"
   cd "$BCC_BUILD_DIR"
-  cmake -DLLVM_DIR="${DEPSDIR}"/clang+llvm13/lib/cmake/llvm -DPYTHON_CMD=python3 ..
+  cmake -DLLVM_DIR="${DEPSDIR}"/clang+llvm13/lib/cmake/llvm -DPYTHON_CMD=python3 \
+  -DENABLE_EXAMPLES=OFF -DENABLE_MAN=OFF -DENABLE_TESTS=OFF -DRUN_LUA_TESTS=OFF ..
   make -j $(getconf _NPROCESSORS_ONLN)
   $SUDO make install
 
@@ -140,6 +141,6 @@ get_install_bcc
 compile_hashlib
 
 echo -e "${COLOR_GREEN}[INFO] Install Python3 requirements ${COLOR_OFF}"
-pip3 install --ignore-installed -r ${DIR}/requirements.txt
+sudo python3 -m pip install -r ${DIR}/requirements.txt --user
 
 success_message

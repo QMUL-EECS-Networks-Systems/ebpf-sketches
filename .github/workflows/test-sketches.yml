@@ -1,12 +1,13 @@
 name: eBPF Sketches Test
-
-on: push
-
-env:
-  BUILD_TYPE: Debug
+on:
+  workflow_run:
+    workflows: ["eBPF Sketches Build & Publish"]
+    types:
+      - completed
 
 jobs:
-  test:
+  count-sketch:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -19,17 +20,15 @@ jobs:
     - name: System info
       run: |
         uname -a
-    - name: Configure and Build
+        ip addr
+    - name: Pull docker container
       run: |
-        chmod +x "${GITHUB_WORKSPACE}/install-requirements.sh"
-        ${GITHUB_WORKSPACE}/install-requirements.sh
-    - name: set up python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
-    - name: install Python dependencies
-      run: |
-        sudo python3 -m pip install -r ${GITHUB_WORKSPACE}/requirements.txt --user
+        docker pull sebymiano/ebpf-sketches:latest
     - name: Test count-sketch
-      run: |
-        sudo timeout --preserve-status -s SIGINT 30 sudo python3 ${GITHUB_WORKSPACE}/count_sketch.py -i lo -m NATIVE -a DROP
+      uses: addnab/docker-run-action@v3
+      with:
+          image: sebymiano/ebpf-sketches:latest
+          options: --privileged --network=host --pid=host
+          run: |
+              sudo timeout --preserve-status -s SIGINT 30 \
+              sudo python3 count_sketch.py -i lo -m NATIVE -a DROP
