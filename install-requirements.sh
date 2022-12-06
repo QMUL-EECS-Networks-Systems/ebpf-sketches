@@ -118,6 +118,8 @@ set -e
 
 echo -e "${COLOR_GREEN}[INFO] Install system requirements ${COLOR_OFF}"
 $SUDO apt update
+$SUDO add-apt-repository ppa:deadsnakes/ppa -y || true
+$SUDO apt update
 PACKAGES=""
 PACKAGES+=" git wget gnupg2 software-properties-common" # needed to clone dependencies
 PACKAGES+=" build-essential cmake" # provides compiler and other compilation tools
@@ -126,7 +128,7 @@ PACKAGES+=" arping bison clang-format cmake dh-python \
   dpkg-dev pkg-kde-tools ethtool flex inetutils-ping iperf \
   libedit-dev libelf-dev \
   libfl-dev libzip-dev linux-libc-dev libluajit-5.1-dev \
-  luajit python3-netaddr python3-pyroute2 python3-distutils python3 python3-pip"
+  luajit python3-netaddr python3-pyroute2 python3-distutils python3.10 python3-pip"
 PACKAGES+=" libssl-dev" # needed for certificate based security
 PACKAGES+=" sudo"
 PACKAGES+=" libpcap-dev" # needed for packetcapture filter
