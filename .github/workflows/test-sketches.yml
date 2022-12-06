@@ -1,4 +1,4 @@
-name: eBPF Sketches Build
+name: eBPF Sketches Test
 
 on: push
 
@@ -6,7 +6,7 @@ env:
   BUILD_TYPE: Debug
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -23,3 +23,6 @@ jobs:
       run: |
         chmod +x "${GITHUB_WORKSPACE}/install-requirements.sh"
         ${GITHUB_WORKSPACE}/install-requirements.sh
+    - name: Test count-sketch
+      run: |
+        sudo timeout --preserve-status -s SIGINT 30 sudo python3 ${GITHUB_WORKSPACE}/count_sketch.py -i lo -m NATIVE -a DROP
