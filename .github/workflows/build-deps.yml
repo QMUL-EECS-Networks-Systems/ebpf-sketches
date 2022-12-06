@@ -23,4 +23,11 @@ jobs:
       run: |
         chmod +x "${GITHUB_WORKSPACE}/install-requirements.sh"
         ${GITHUB_WORKSPACE}/install-requirements.sh
+  test:
+    needs: build
+
+    steps:
+    - name: Run
+      run: |
+        sudo timeout --preserve-status -s SIGINT 30 sudo python3 ${GITHUB_WORKSPACE}/count_sketch.py -i lo -m NATIVE -a DROP
       
