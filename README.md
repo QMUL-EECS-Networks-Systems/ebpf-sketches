@@ -20,7 +20,7 @@ We provide a script to automatically install all the requirements needed by this
 You can simply run:
 
 ```shell
-sudo ./install-requirements.sh
+./install-requirements.sh
 ```
 
 ### Manual installation
