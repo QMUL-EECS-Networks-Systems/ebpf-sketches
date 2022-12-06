@@ -18,9 +18,13 @@ RUN git -C / clone --branch ${DEFAULT_BRANCH} https://github.com/QMUL-EECS-Netwo
 FROM branch-version-${DEFAULT_CLONE_MODE} AS builder
 WORKDIR /ebpf-sketches
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install sudo lsb-release
+    DEBIAN_FRONTEND=noninteractive apt-get -y install sudo lsb-release \
+    linux-headers-$(uname -r) psmisc procps iproute2 modprobe
+    
 RUN ./install-requirements.sh
 RUN rm -rf deps
 
 RUN if [ ! -f "/usr/bin/python" ]; then ln -s /bin/python3 /usr/bin/python; fi
 RUN if [ ! -f "/usr/local/bin/python" ]; then ln -s /usr/bin/python3 /usr/local/bin/python; fi
+
+ENTRYPOINT ["/bin/bash"]

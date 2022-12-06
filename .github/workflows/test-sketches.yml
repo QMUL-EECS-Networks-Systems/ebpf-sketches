@@ -12,23 +12,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-latest]
-
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
-    - name: System info
-      run: |
-        uname -a
-        ip addr
-    - name: Pull docker container
-      run: |
-        docker pull sebymiano/ebpf-sketches:latest
-    - name: Test count-sketch
-      uses: addnab/docker-run-action@v3
-      with:
-          image: sebymiano/ebpf-sketches:latest
-          options: --privileged --network=host --pid=host
+    container:
+      image: sebymiano/ebpf-sketches:latest
+      options: --privileged --pid=host
+      steps:
+        - name: System info
           run: |
-              sudo timeout --preserve-status -s SIGINT 30 \
-              sudo python3 count_sketch.py -i lo -m NATIVE -a DROP
+            uname -a
+
+        - name: Test count-sketch
+          run: |
+            sudo timeout --preserve-status -s SIGINT 30 \
+            sudo python3 count_sketch.py -i lo -m NATIVE -a DROP
