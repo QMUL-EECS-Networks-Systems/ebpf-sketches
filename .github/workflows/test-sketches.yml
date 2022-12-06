@@ -24,10 +24,10 @@ jobs:
         chmod +x "${GITHUB_WORKSPACE}/install-requirements.sh"
         ${GITHUB_WORKSPACE}/install-requirements.sh
     - name: set up python
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.9'
-      - name: install Python dependencies
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    - name: install Python dependencies
         run: |
           pip3 install -r ${GITHUB_WORKSPACE}/requirements.txt
     - name: Test count-sketch
