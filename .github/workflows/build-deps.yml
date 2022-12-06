@@ -1,0 +1,26 @@
+name: eBPF Sketches Build
+
+on: push
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: System info
+      run: |
+        uname -a
+    - name: Configure and Build
+      run: |
+        chmod +x "${GITHUB_WORKSPACE}/install-requirements.sh"
+        ${GITHUB_WORKSPACE}/install-requirements.sh
+      

@@ -5,6 +5,8 @@ COLOR_GREEN='\033[0;32m'
 COLOR_RED='\033[0;31m'
 COLOR_OFF='\033[0m' # No Color
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 function print_system_info {
   echo -e "${COLOR_GREEN}***********************SYSTEM INFO*************************************"
   echo -e "kernel version:" $(uname -r)
@@ -69,6 +71,16 @@ get_install_bcc() {
   touch "$DEPSDIR/bcc_installed"
 }
 
+compile_hashlib() {
+  HASHLIB_DIR=${DIR}/src/hash_lib
+
+  pushd .
+  cd "${HASHLIB_DIR}"
+  make
+  
+  popd
+}
+
 trap error_message ERR
 
 function show_help() {
@@ -114,7 +126,7 @@ PACKAGES+=" arping bison clang-format cmake dh-python \
   dpkg-dev pkg-kde-tools ethtool flex inetutils-ping iperf \
   libedit-dev libelf-dev \
   libfl-dev libzip-dev linux-libc-dev libluajit-5.1-dev \
-  luajit python3-netaddr python3-pyroute2 python3-distutils python3 "
+  luajit python3-netaddr python3-pyroute2 python3-distutils python3 python3-pip"
 PACKAGES+=" libssl-dev" # needed for certificate based security
 PACKAGES+=" sudo"
 PACKAGES+=" libpcap-dev" # needed for packetcapture filter
@@ -123,6 +135,7 @@ $SUDO bash -c "DEBIAN_FRONTEND=noninteractive apt install -yq $PACKAGES"
 
 get_llvm
 get_install_bcc
+compile_hashlib
 
 echo -e "${COLOR_GREEN}[INFO] Install Python3 requirements ${COLOR_OFF}"
 pip3 install --ignore-installed -r ${DIR}/requirements.txt
