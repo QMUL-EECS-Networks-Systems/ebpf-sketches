@@ -24,6 +24,9 @@ jobs:
       - name: System info
         run: |
           uname -a
+      - name: List files
+        run: |
+          ls
       - name: Test count-sketch
         run: |
           sudo timeout --preserve-status -s SIGINT 30 \
