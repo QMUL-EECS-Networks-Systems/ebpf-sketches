@@ -28,3 +28,69 @@ jobs:
             run: |
                 sudo timeout --preserve-status -s SIGINT 30 \
                 sudo python3 count_sketch.py -i lo -m NATIVE -a DROP
+  count-min-sketch:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest]
+    steps:
+      - name: System info
+        run: |
+          uname -a
+          ip addr
+      - name: Pull docker container
+        run: |
+          docker pull sebymiano/ebpf-sketches:latest
+      - name: Test count-sketch
+        uses: addnab/docker-run-action@v3
+        with:
+            image: sebymiano/ebpf-sketches:latest
+            options: --privileged --network=host --pid=host -v /sys/kernel/debug:/sys/kernel/debug:rw -v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /usr/include/linux:/usr/include/linux:ro
+            run: |
+                sudo timeout --preserve-status -s SIGINT 30 \
+                sudo python3 countmin_sketch.py -i lo -m NATIVE -a DROP
+  nitrosketch_countskech:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest]
+    steps:
+      - name: System info
+        run: |
+          uname -a
+          ip addr
+      - name: Pull docker container
+        run: |
+          docker pull sebymiano/ebpf-sketches:latest
+      - name: Test count-sketch
+        uses: addnab/docker-run-action@v3
+        with:
+            image: sebymiano/ebpf-sketches:latest
+            options: --privileged --network=host --pid=host -v /sys/kernel/debug:/sys/kernel/debug:rw -v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /usr/include/linux:/usr/include/linux:ro
+            run: |
+                sudo timeout --preserve-status -s SIGINT 30 \
+                sudo python3 nitrosketch.py -i lo -a DROP -p 0.1
+  univmon_nitrosketch:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-latest]
+    steps:
+      - name: System info
+        run: |
+          uname -a
+          ip addr
+      - name: Pull docker container
+        run: |
+          docker pull sebymiano/ebpf-sketches:latest
+      - name: Test count-sketch
+        uses: addnab/docker-run-action@v3
+        with:
+            image: sebymiano/ebpf-sketches:latest
+            options: --privileged --network=host --pid=host -v /sys/kernel/debug:/sys/kernel/debug:rw -v /lib/modules:/lib/modules:ro -v /usr/src:/usr/src:ro -v /usr/include/linux:/usr/include/linux:ro
+            run: |
+                sudo timeout --preserve-status -s SIGINT 30 \
+                sudo python3 nitrosketch-univmon.py -i lo -a DROP -p 0.1 -l 16
