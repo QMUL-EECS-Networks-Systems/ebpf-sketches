@@ -42,7 +42,7 @@ jobs:
       - name: Pull docker container
         run: |
           docker pull sebymiano/ebpf-sketches:latest
-      - name: Test count-sketch
+      - name: Test count-min-sketch
         uses: addnab/docker-run-action@v3
         with:
             image: sebymiano/ebpf-sketches:latest
@@ -64,7 +64,7 @@ jobs:
       - name: Pull docker container
         run: |
           docker pull sebymiano/ebpf-sketches:latest
-      - name: Test count-sketch
+      - name: Test nitrosketch_countskech
         uses: addnab/docker-run-action@v3
         with:
             image: sebymiano/ebpf-sketches:latest
@@ -86,7 +86,7 @@ jobs:
       - name: Pull docker container
         run: |
           docker pull sebymiano/ebpf-sketches:latest
-      - name: Test count-sketch
+      - name: Test univmon_nitrosketch
         uses: addnab/docker-run-action@v3
         with:
             image: sebymiano/ebpf-sketches:latest
