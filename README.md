@@ -10,8 +10,8 @@ In particular, we have:
 
 1. [Count Sketch](#count-sketch)
 2. [Count-min Sketch](#count-min-sketch)
-2. [Nitrosketch + Count Sketch](#nitrosketch)
-2. [UnivMon + Nitrosketch](#univmon)
+2. [Nitrosketch + Count Sketch](#nitrosketch--count-sketch)
+2. [UnivMon + Nitrosketch](#univmon--nitrosketch)
 
 ## Requirements
 
