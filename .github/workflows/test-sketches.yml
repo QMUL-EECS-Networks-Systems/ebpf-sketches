@@ -15,12 +15,16 @@ jobs:
     container:
       image: sebymiano/ebpf-sketches:latest
       options: --privileged --pid=host
-      steps:
-        - name: System info
-          run: |
-            uname -a
-
-        - name: Test count-sketch
-          run: |
-            sudo timeout --preserve-status -s SIGINT 30 \
-            sudo python3 count_sketch.py -i lo -m NATIVE -a DROP
+      volumes:
+        - /sys/kernel/debug:/sys/kernel/debug:rw
+        - /lib/modules:/lib/modules:ro
+        - /usr/src:/usr/src:ro
+        - /usr/include/linux:/usr/include/linux:ro
+    steps:
+      - name: System info
+        run: |
+          uname -a
+      - name: Test count-sketch
+        run: |
+          sudo timeout --preserve-status -s SIGINT 30 \
+          sudo python3 count_sketch.py -i lo -m NATIVE -a DROP
