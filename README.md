@@ -171,7 +171,7 @@ If you want to run `UnivMon + Nitrosketch`, this is an example.
 This script will attach the XDP program in `XDP_DRV` mode and the final action to execute will be `DROP`; the sketch will run with a probability `p=0.1` (i.e., `1%`), and with a number of layers `l=16`.
 
 ```shell
-sudo python3 nitrosketch.py -i ens4f0 -a DROP -p 0.1 -l 16
+sudo python3 nitrosketch-univmon.py -i ens4f0 -a DROP -p 0.1 -l 16
 ```
 
 The full list of commands is the following:
