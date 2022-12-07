@@ -2,6 +2,7 @@
 
 [![eBPF Sketches Build & Publish](https://github.com/QMUL-EECS-Networks-Systems/ebpf-sketches/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/QMUL-EECS-Networks-Systems/ebpf-sketches/actions/workflows/build-and-publish.yml)
 [![eBPF Sketches Test](https://github.com/QMUL-EECS-Networks-Systems/ebpf-sketches/actions/workflows/test-sketches.yml/badge.svg)](https://github.com/QMUL-EECS-Networks-Systems/ebpf-sketches/actions/workflows/test-sketches.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 This repository contains a list of the most famous sketches implemented within the eBPF/XDP subsystem.
 
