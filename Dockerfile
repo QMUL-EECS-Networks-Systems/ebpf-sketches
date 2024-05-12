@@ -1,6 +1,6 @@
 ARG DEFAULT_CLONE_MODE=local
 
-FROM ubuntu:20.04 AS tmp-builder
+FROM ubuntu:22.04 AS tmp-builder
 
 ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
