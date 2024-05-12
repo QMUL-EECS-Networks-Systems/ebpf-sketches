@@ -27,11 +27,13 @@ FROM branch-version-${DEFAULT_CLONE_MODE} AS builder
 WORKDIR /ebpf-sketches
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install sudo lsb-release \
-    linux-headers-generic psmisc procps iproute2 pipx 
-RUN pipx install poetry
+    linux-headers-generic psmisc procps iproute2 python3-venv pipx 
     
 RUN ./install-requirements.sh
 RUN rm -rf deps
+
+RUN curl -sSL https://install.python-poetry.org | python3.11 -
+ENV PATH="/root/.local/bin:$PATH"
 
 RUN poetry env use python3.11
 RUN poetry install --no-interaction
