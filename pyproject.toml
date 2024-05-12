@@ -5,6 +5,7 @@ description = "A list of network measurement sketch algorithms implemented in eB
 authors = ["Sebastiano Miano <mianosebastiano@gmail.com>"]
 license = "Apache v2"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.13"

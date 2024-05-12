@@ -36,7 +36,7 @@ RUN curl -sSL https://install.python-poetry.org | python3.11 -
 ENV PATH="/root/.local/bin:$PATH"
 
 RUN poetry env use python3.11
-RUN poetry install --no-interaction
+RUN poetry install --no-interaction --no-root
 
 ENV VIRTUAL_ENV=/ebpf-sketches/.venv PATH="/ebpf-sketches/.venv/bin:$PATH"
 
