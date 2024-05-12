@@ -2,6 +2,13 @@ ARG DEFAULT_CLONE_MODE=local
 
 FROM ubuntu:20.04 AS tmp-builder
 
+ENV PIP_DEFAULT_TIMEOUT=100 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    LANG=C.UTF-8 \
+    DEBIAN_FRONTEND=noninteractive
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /
@@ -16,15 +23,19 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install git
 RUN git -C / clone --branch ${DEFAULT_BRANCH} https://github.com/QMUL-EECS-Networks-Systems/ebpf-sketches.git
 
 FROM branch-version-${DEFAULT_CLONE_MODE} AS builder
+
 WORKDIR /ebpf-sketches
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install sudo lsb-release \
-    linux-headers-generic psmisc procps iproute2
+    linux-headers-generic psmisc procps iproute2 pipx 
+RUN pipx install poetry
     
 RUN ./install-requirements.sh
 RUN rm -rf deps
 
-RUN if [ ! -f "/usr/bin/python" ]; then ln -s /bin/python3 /usr/bin/python; fi
-RUN if [ ! -f "/usr/local/bin/python" ]; then ln -s /usr/bin/python3 /usr/local/bin/python; fi
+RUN poetry env use python3.11
+RUN poetry install --no-interaction
+
+ENV VIRTUAL_ENV=/ebpf-sketches/.venv PATH="/ebpf-sketches/.venv/bin:$PATH"
 
 ENTRYPOINT ["/bin/bash"]
