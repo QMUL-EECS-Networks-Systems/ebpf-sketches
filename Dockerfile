@@ -19,7 +19,7 @@ FROM branch-version-${DEFAULT_CLONE_MODE} AS builder
 WORKDIR /ebpf-sketches
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install sudo lsb-release \
-    linux-headers-$(uname -r) psmisc procps iproute2
+    linux-headers-generic psmisc procps iproute2
     
 RUN ./install-requirements.sh
 RUN rm -rf deps
