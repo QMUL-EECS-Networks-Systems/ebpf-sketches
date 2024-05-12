@@ -122,6 +122,7 @@ $SUDO apt update
 # $SUDO add-apt-repository ppa:deadsnakes/ppa -y || true
 # $SUDO apt update
 PACKAGES=""
+PACKAGES+=" libelf-dev python3.11 python3.11-dev python3.11-venv rsync libcap2 curl pkg-config build-essential python-is-python3"
 PACKAGES+=" git wget gnupg2 software-properties-common" # needed to clone dependencies
 PACKAGES+=" build-essential cmake" # provides compiler and other compilation tools
 PACKAGES+=" bison autopoint gettext texinfo help2man flex" # bcc dependencies
