@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - 'main'
+  schedule:
+    # Runs at 00:00 UTC on the first of every month
+    - cron: '0 0 1 * *'
 
 jobs:
   docker:
